@@ -1,6 +1,5 @@
 using HarryPotterKata;
 using HarryPotterKata.Discount;
-using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -80,8 +79,28 @@ namespace HarryPotterKataTest
             _basket.AddBook(new Book("Volume 4"));
             _basket.AddBook(new Book("Volume 5"));
             _basket.AddBook(new Book("Volume 6"));
-            var exception = Assert.Throws<ArgumentException>(() => _basket.Checkout());
+            var exception = Assert.Throws<KeyNotFoundException>(() => _basket.Checkout());
             Assert.Equal("Discount strategy not implemented", exception.Message);
+        }
+
+        [Fact]
+        public void should_have_ten_percent_discount_when_three_books_do_not_have_the_same_volume_and_no_discount_for_the_last_book()
+        {
+            _basket.AddBook(new Book("Volume 1"));
+            _basket.AddBook(new Book("Volume 2"));
+            _basket.AddBook(new Book("Volume 3"));
+            _basket.AddBook(new Book("Volume 3"));
+            Assert.Equal((24 * .9) + 8, _basket.Checkout());
+        }
+        [Fact]
+        public void should_have_ten_percent_discount_when_three_books_do_not_have_the_same_volume_and_no_discount_for_the_last_two_books()
+        {
+            _basket.AddBook(new Book("Volume 1"));
+            _basket.AddBook(new Book("Volume 2"));
+            _basket.AddBook(new Book("Volume 3"));
+            _basket.AddBook(new Book("Volume 3"));
+            _basket.AddBook(new Book("Volume 3"));
+            Assert.Equal((24 * .9) + 16, _basket.Checkout());
         }
     }
 }
