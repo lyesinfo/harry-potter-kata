@@ -1,10 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using HarryPotterKata.Discount;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace HarryPotterKata
 {
     public class Basket
     {
+        private readonly IDictionary<int, IDiscountStrategy> _discountStrategies;
+
+        public Basket(IDictionary<int, IDiscountStrategy> discountStrategies)
+        {
+            _discountStrategies = discountStrategies;
+        }
         private readonly IList<Book> _books = new List<Book>();
         public void AddBook(Book book)
         {
@@ -13,16 +21,20 @@ namespace HarryPotterKata
 
         public double Checkout()
         {
-            var nbVolumes = _books.GroupBy(b => b.Volume).Count();
-            var cost = _books.Sum(b => b.Price);
-            return nbVolumes switch
-            {
-                2 => cost * .95,
-                3 => cost * .9,
-                4 => cost * .85,
-                5 => cost * .8,
-                _ => _books.Sum(b => b.Price),
-            };
+            var numberDistinctVolumes = GetNumberDistinctVolumes();
+            if (!_discountStrategies.ContainsKey(numberDistinctVolumes))
+                throw new ArgumentException("Discount strategy not implemented");
+            return GetTotalCostBeforeDiscount() * _discountStrategies[numberDistinctVolumes].GetDiscount();
+        }
+
+        private double GetTotalCostBeforeDiscount()
+        {
+            return _books.Sum(b => b.Price);
+        }
+
+        private int GetNumberDistinctVolumes()
+        {
+            return _books.GroupBy(b => b.Volume).Count();
         }
     }
 }
