@@ -2,9 +2,6 @@
 {
     public class FivePercentDiscount : IDiscountStrategy
     {
-        public double GetDiscount()
-        {
-            return .95;
-        }
+        public double GetDiscount() => .95;
     }
 }

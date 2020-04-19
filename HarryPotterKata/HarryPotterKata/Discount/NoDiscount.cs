@@ -2,9 +2,6 @@
 {
     public class NoDiscount : IDiscountStrategy
     {
-        public double GetDiscount()
-        {
-            return 1;
-        }
+        public double GetDiscount() => 1;
     }
 }
