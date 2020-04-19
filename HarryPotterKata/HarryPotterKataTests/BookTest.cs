@@ -23,84 +23,133 @@ namespace HarryPotterKataTest
         }
         [Fact]
         public void should_book_price_equals_to_8_when_created()
-        {
+        {   //arrange
             var book = new Book("Volume 1");
-            Assert.Equal(8, book.Price);
+            var expected = 8;
+            //act
+            var actual = book.Price;
+            //assert
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
         public void should_two_books_price_equals_to_16_when_they_have_the_same_volume()
         {
+            //arrange 
             _basket.AddBook(new Book("Volume 1"));
             _basket.AddBook(new Book("Volume 1"));
-            Assert.Equal(16, _basket.Checkout());
+            var expected = 16;
+            //act
+            var actual = _basket.Checkout();
+            //assert
+            Assert.Equal(expected, actual);
         }
         [Fact]
         public void should_have_five_percent_discount_when_two_books_books_do_not_have_the_same_volume()
         {
+            //arrange 
             _basket.AddBook(new Book("Volume 1"));
             _basket.AddBook(new Book("Volume 2"));
-            Assert.Equal(16 * .95, _basket.Checkout());
+            var expected = 16 * .95;
+            //act
+            var actual = _basket.Checkout();
+            //assert
+            Assert.Equal(expected, actual);
         }
         [Fact]
         public void should_have_ten_percent_discount_when_three_books_do_not_have_the_same_volume()
         {
+            //arrange 
             _basket.AddBook(new Book("Volume 1"));
             _basket.AddBook(new Book("Volume 2"));
             _basket.AddBook(new Book("Volume 3"));
-            Assert.Equal(24 * .90, _basket.Checkout());
+            var expected = 24 * .90;
+            //act
+            var actual = _basket.Checkout();
+            //assert
+            Assert.Equal(expected, actual);
         }
         [Fact]
         public void should_have_fifteen_percent_discount_when_four_books_do_not_have_the_same_volume()
         {
+            //arrange 
             _basket.AddBook(new Book("Volume 1"));
             _basket.AddBook(new Book("Volume 2"));
             _basket.AddBook(new Book("Volume 3"));
             _basket.AddBook(new Book("Volume 4"));
-            Assert.Equal(32 * .85, _basket.Checkout());
+            var expected = 32 * .85;
+            //act
+            var actual = _basket.Checkout();
+            //assert
+            Assert.Equal(expected, actual);
         }
         [Fact]
         public void should_have_twenty_percent_discount_when_four_books_do_not_have_the_same_volume()
         {
+            //arrange
             _basket.AddBook(new Book("Volume 1"));
             _basket.AddBook(new Book("Volume 2"));
             _basket.AddBook(new Book("Volume 3"));
             _basket.AddBook(new Book("Volume 4"));
             _basket.AddBook(new Book("Volume 5"));
-            Assert.Equal(40 * .8, _basket.Checkout());
+            var expected = 40 * .8;
+            //act
+            var actual = _basket.Checkout();
+            //assert
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
-        public void should_throw_exception_when_select_not_implemented_strategy()
+        public void should_have_ten_percent_discount_when_three_books_do_not_have_the_same_volume_and_no_discount_for_the_last_book()
         {
+            //arrange 
+            _basket.AddBook(new Book("Volume 1"));
+            _basket.AddBook(new Book("Volume 2"));
+            _basket.AddBook(new Book("Volume 3"));
+            _basket.AddBook(new Book("Volume 3"));
+            var expected = (24 * .9) + 8;
+            //act
+            var actual = _basket.Checkout();
+            //assert
+            Assert.Equal(expected, actual);
+        }
+        [Fact]
+        public void should_have_ten_percent_discount_when_three_books_do_not_have_the_same_volume_and_no_discount_for_the_last_two_books()
+        {
+            //arrange 
+            _basket.AddBook(new Book("Volume 1"));
+            _basket.AddBook(new Book("Volume 2"));
+            _basket.AddBook(new Book("Volume 3"));
+            _basket.AddBook(new Book("Volume 3"));
+            _basket.AddBook(new Book("Volume 3"));
+            var expected = (24 * .9) + 16;
+            //act
+            var actual = _basket.Checkout();
+            //assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void should_create_three_sets_and_the_max_size_of_a_set_equal_to_the_number_of_strategies_to_not_get_KeyNotFoundException()
+        {
+            //arrange 
             _basket.AddBook(new Book("Volume 1"));
             _basket.AddBook(new Book("Volume 2"));
             _basket.AddBook(new Book("Volume 3"));
             _basket.AddBook(new Book("Volume 4"));
             _basket.AddBook(new Book("Volume 5"));
             _basket.AddBook(new Book("Volume 6"));
-            var exception = Assert.Throws<KeyNotFoundException>(() => _basket.Checkout());
-            Assert.Equal("Discount strategy not implemented", exception.Message);
-        }
-
-        [Fact]
-        public void should_have_ten_percent_discount_when_three_books_do_not_have_the_same_volume_and_no_discount_for_the_last_book()
-        {
-            _basket.AddBook(new Book("Volume 1"));
-            _basket.AddBook(new Book("Volume 2"));
-            _basket.AddBook(new Book("Volume 3"));
-            _basket.AddBook(new Book("Volume 3"));
-            Assert.Equal((24 * .9) + 8, _basket.Checkout());
-        }
-        [Fact]
-        public void should_have_ten_percent_discount_when_three_books_do_not_have_the_same_volume_and_no_discount_for_the_last_two_books()
-        {
-            _basket.AddBook(new Book("Volume 1"));
-            _basket.AddBook(new Book("Volume 2"));
-            _basket.AddBook(new Book("Volume 3"));
-            _basket.AddBook(new Book("Volume 3"));
-            _basket.AddBook(new Book("Volume 3"));
-            Assert.Equal((24 * .9) + 16, _basket.Checkout());
+            _basket.AddBook(new Book("Volume 7"));
+            _basket.AddBook(new Book("Volume 8"));
+            _basket.AddBook(new Book("Volume 9"));
+            _basket.AddBook(new Book("Volume 10"));
+            _basket.AddBook(new Book("Volume 11"));
+            _basket.AddBook(new Book("Volume 11"));
+            var expected = (40 * .8) + (40 * .8) + 16;
+            //act
+            var actual = _basket.Checkout();
+            //assert
+            Assert.Equal(expected, actual);
         }
     }
 }
