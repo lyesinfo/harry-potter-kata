@@ -4,7 +4,7 @@ namespace HarryPotterKata
 {
     public class Book
     {
-        public double Price { get; } = 8;
+        public decimal Price { get; } = 8;
         public string Volume { get; }
 
         public Book(string volume)

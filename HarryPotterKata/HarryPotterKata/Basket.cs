@@ -33,10 +33,13 @@ namespace HarryPotterKata
             }
         }
 
-        public double Checkout() => _bookSets.Sum(set =>
-                GetTotalCostBeforeDiscount(set) * _discountStrategies[set.Count].GetDiscount());
+        public decimal Checkout()
+        {
+            return _bookSets.Sum(s =>
+                GetSetCostBeforeDiscount(s) * (decimal)_discountStrategies[s.Count].GetDiscount());
+        }
 
-        private double GetTotalCostBeforeDiscount(IEnumerable<Book> books) => books.Sum(b => b.Price);
+        private static decimal GetSetCostBeforeDiscount(IEnumerable<Book> books) => books.Sum(b => b.Price);
     }
 
 }
